@@ -2,8 +2,6 @@ import javax.swing.*;
 import javax.swing.border.Border;
 import javax.swing.border.LineBorder;
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.sql.*;
 import javax.swing.JScrollPane;
 import javax.swing.table.DefaultTableModel;
@@ -55,14 +53,9 @@ public class PhoneBookHP{
     public static JButton loginBtn = new JButton("Login");
     public static JButton insertBtn = new JButton("Add");
     public static JButton rmBtn = new JButton("Remove Contact");
-    public static JButton backBtn = new JButton("Back");
     public static JButton newNumBtn = new JButton("New Number");
     public static JButton rmNumBtn = new JButton("Remove Number");
-
     public static Border border = new LineBorder(Color.ORANGE, 4, true);
-
-
-//    private static ResultSet rs;
     private static int colNo;
 
     public static ResultSet readData(int auth) throws SQLException {
@@ -94,14 +87,14 @@ public class PhoneBookHP{
         prvPhoneNums.setBackground(Color.GRAY);
 
         String[] cols = {"FirstName","PhoneNumber"};
-        DefaultTableModel pubTableModel = (DefaultTableModel) pubTable.getModel();;
-        DefaultTableModel prvTableModel = (DefaultTableModel) prvTable.getModel();;
+        DefaultTableModel pubTableModel = (DefaultTableModel) pubTable.getModel();
+        DefaultTableModel prvTableModel = (DefaultTableModel) prvTable.getModel();
         pubTableModel.setColumnIdentifiers(cols);
         prvTableModel.setColumnIdentifiers(cols);
 
         ResultSet rs1 = readData(1);
         ResultSet rs2 = readData(2);
-        Object[] data = new Object[0];
+        Object[] data;
         while (rs1.next()) {
             data = new Object[colNo];
             for (int i = 0; i < colNo; i++) {
@@ -136,16 +129,15 @@ public class PhoneBookHP{
 //        newNumBtn.addActionListener(newNum);
         rmNumBtn.setBounds(180, 360, 130, 25);
 //        rmNumBtn.addActionListener(rmNum);
-
-        PhoneBookRm.removePage();
-        PhoneBookInsert.insertPage();
-
         frame.add(hpHeaderPub);
         frame.add(hpHeaderPrv);
         frame.add(pubPhoneNums);
         frame.add(prvPhoneNums);
         frame.add(addContact);
         frame.add(rmContact);
+
+        PhoneBookRm.removePage();
+        PhoneBookInsert.insertPage();
         frame.setVisible(true);
     }
         public static void main(String[] args) throws SQLException {

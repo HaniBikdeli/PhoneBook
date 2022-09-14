@@ -1,10 +1,6 @@
 import javax.swing.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.sql.SQLException;
 
 public class PhoneBookLogin extends PhoneBookHP{
-
 
     public static void loginPage(){
         frameLogin.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -12,7 +8,6 @@ public class PhoneBookLogin extends PhoneBookHP{
         frameLogin.setTitle("Login Page");
         frameLogin.setLocationRelativeTo(null);
         frameLogin.setLayout(null);
-
 
         userInput.setBounds(135,55,120,25);
         passInput.setBounds(135,100,120,25);
@@ -29,14 +24,8 @@ public class PhoneBookLogin extends PhoneBookHP{
         frameLogin.setVisible(true);
     }
 
-
-    public static void main(String args[]){
+    public static void main(String[] args){
         loginPage();
     }
 
-    public void actionPerformed(ActionEvent e) throws SQLException {
-        frameLogin.dispose();
-        PhoneBookHP home = new PhoneBookHP();
-        home.homePage();
-    }
 }
