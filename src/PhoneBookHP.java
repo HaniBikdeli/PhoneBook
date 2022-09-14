@@ -8,7 +8,7 @@ import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableColumnModel;
 
 public class PhoneBookHP{
-    public static final String URL = "jdbc:sqlserver://localhost\\SQL;databaseName=PhoneBook;trustServerCertificate=true";
+    public static final String URL = "jdbc:sqlserver://localhost\\SQL;database=PhoneBook;trustServerCertificate=true";
     public static final String DB_USERNAME = "sa";
     public static final String DB_PASSWORD = "123";
     public static Connection con;
@@ -55,13 +55,11 @@ public class PhoneBookHP{
     public static JButton rmBtn = new JButton("Remove Contact");
     public static JButton newNumBtn = new JButton("New Number");
     public static JButton rmNumBtn = new JButton("Remove Number");
-    public static Border border = new LineBorder(Color.ORANGE, 4, true);
+    public static Border border = new LineBorder(Color.gray, 3, true);
     private static int colNo;
 
     public static ResultSet readData(int auth) throws SQLException {
-        Connection con = DriverManager.getConnection(URL, DB_USERNAME, DB_PASSWORD);
-        Statement statement = con.createStatement();
-        String sql = "Use PhoneBook;" + " select FirstName,PhoneNumber from dbo.contacts where auth = " + auth;
+        String sql = "Use PhoneBook"+" select FullName , PhoneNumber from dbo.contacts  where auth = " + auth;
         ResultSet rs = statement.executeQuery(sql);
         ResultSetMetaData rsmd = rs.getMetaData();
         colNo = rsmd.getColumnCount();
@@ -69,31 +67,28 @@ public class PhoneBookHP{
     }
     
     public static void homePage() throws SQLException {
-
+        System.out.println(readData(1));
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.setSize(600, 450);
         frame.setTitle("Home Page");
         frame.setLocationRelativeTo(null);
         frame.setLayout(null);
+        frame.setBackground(Color.cyan);
 
         hpHeaderPub.setBounds(110, 10, 125, 15);
         pubPhoneNums.setBounds(50, 45, 250, 125);
         pubPhoneNums.setBorder(BorderFactory.createLineBorder(Color.DARK_GRAY));
-        pubPhoneNums.setBackground(Color.GRAY);
 
         hpHeaderPrv.setBounds(110, 190, 125, 15);
         prvPhoneNums.setBounds(50, 210, 250, 125);
         prvPhoneNums.setBorder(BorderFactory.createLineBorder(Color.DARK_GRAY));
-        prvPhoneNums.setBackground(Color.GRAY);
 
-        String[] cols = {"FirstName","PhoneNumber"};
+        String[] cols = {"FirstName","PhoneNumber" , "btn"};
         DefaultTableModel pubTableModel = (DefaultTableModel) pubTable.getModel();
         DefaultTableModel prvTableModel = (DefaultTableModel) prvTable.getModel();
         pubTableModel.setColumnIdentifiers(cols);
         prvTableModel.setColumnIdentifiers(cols);
-
         ResultSet rs1 = readData(1);
-        ResultSet rs2 = readData(2);
         Object[] data;
         while (rs1.next()) {
             data = new Object[colNo];
@@ -102,6 +97,7 @@ public class PhoneBookHP{
             }
             pubTableModel.addRow(data);
         }
+        ResultSet rs2 = readData(2);
         while (rs2.next()) {
             data = new Object[colNo];
             for (int i = 0; i < colNo; i++) {
@@ -109,6 +105,7 @@ public class PhoneBookHP{
             }
             prvTableModel.addRow(data);
         }
+
         pubTable.setModel(pubTableModel);
         prvTable.setModel(prvTableModel);
         prvPhoneNums.setBorder(border);
@@ -139,6 +136,8 @@ public class PhoneBookHP{
         PhoneBookRm.removePage();
         PhoneBookInsert.insertPage();
         frame.setVisible(true);
+        ResultSet rs = readData(1);
+        System.out.println(rs.isClosed());
     }
         public static void main(String[] args) throws SQLException {
             homePage();
