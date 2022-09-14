@@ -76,10 +76,6 @@ public class PhoneBookHP{
     }
     
     public static void homePage() throws SQLException {
-        String question;
-        JTextField editQuestion = new JTextField(question);
-
-
 
         frameHP.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frameHP.setSize(350, 450);
@@ -150,7 +146,6 @@ public class PhoneBookHP{
         frameHP.add(newNumBtn);
         frameHP.add(rmNumBtn);
 
-
         frameHP.setVisible(true);
     }
         static ActionListener newNum = new ActionListener() {
@@ -171,4 +166,4 @@ public class PhoneBookHP{
         public static void main(String[] args) throws SQLException {
             homePage();
         }
-    }
+}
