@@ -11,7 +11,7 @@ public class ActionListener extends PhoneBookHP {
     static java.awt.event.ActionListener backToHP = new java.awt.event.ActionListener() {
         @Override
         public void actionPerformed(ActionEvent e) {
-            frameRm.dispose();
+            frame.dispose();
             try {
                 PhoneBookHP.homePage();
             } catch (SQLException throwables) {
