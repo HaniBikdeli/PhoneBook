@@ -37,6 +37,7 @@ public class PhoneBookHP{
     public static JPanel prvPhoneNums = new JPanel();
     public static JPanel rmContact = new JPanel();
     public static JPanel addContact = new JPanel();
+    public static JPanel searchContact = new JPanel();
     public static JTable pubTable = new JTable();
     public static JTable prvTable = new JTable();
     public static JLabel hpHeaderPub = new JLabel("Your Public Contacts");
@@ -48,66 +49,66 @@ public class PhoneBookHP{
     public static JLabel passLabel = new JLabel("Password");
     public static JPasswordField passInput= new JPasswordField();
     public static JTextField userInput = new JTextField();
-    public static JTextField firstNameInput= new JTextField("Enter Target's FirstName");
+    public static JTextField firstNameInput= new JTextField("Enter Target's FullName");
+    public static JTextField searchInput= new JTextField("Enter Target's FullName");
     public static JTextField phoneNumInput = new JTextField("e.g 09123456789");
     public static JButton loginBtn = new JButton("Login");
     public static JButton insertBtn = new JButton("Add");
-    public static JButton rmBtn = new JButton("Remove Contact");
+    public static JButton searchBtn = new JButton("Search");
     public static JButton newNumBtn = new JButton("New Number");
     public static JButton rmNumBtn = new JButton("Remove Number");
     public static Border border = new LineBorder(Color.gray, 3, true);
-    private static int colNo;
 
-    public static ResultSet readData(int auth) throws SQLException {
-        String sql = "Use PhoneBook"+" select FullName , PhoneNumber from dbo.contacts  where auth = " + auth;
-        ResultSet rs = statement.executeQuery(sql);
-        ResultSetMetaData rsmd = rs.getMetaData();
-        colNo = rsmd.getColumnCount();
-        return rs;
+
+    public static void newTable() throws SQLException {
+//        String[] cols = {"FirstName","PhoneNumber" , "Country" , "Province"};
+//        DefaultTableModel pubTableModel = (DefaultTableModel) pubTable.getModel();
+//        DefaultTableModel prvTableModel = (DefaultTableModel) prvTable.getModel();
+//        pubTableModel.setColumnIdentifiers(cols);
+//        prvTableModel.setColumnIdentifiers(cols);
+//        ResultSet rs1 = readData(1);
+//        Object[] data;
+//        while (rs1.next()) {
+//            data = new Object[colNo];
+//            for (int i = 0; i < colNo; i++) {
+//                data[i] = rs1.getObject(i + 1);
+//            }
+//            pubTableModel.addRow(data);
+//        }
+//        ResultSet rs2 = readData(2);
+//        while (rs2.next()) {
+//            data = new Object[colNo];
+//            for (int i = 0; i < colNo; i++) {
+//                data[i] = rs2.getObject(i + 1);
+//            }
+//            prvTableModel.addRow(data);
+//        }
+//
+//        pubTable.setModel(pubTableModel);
+//        prvTable.setModel(prvTableModel);
+//        prvPhoneNums.setBorder(border);
+        DefaultTableModel model = new DefaultTableModel();
+        pubTable.setModel(model);
+        prvTable.setModel(model);
     }
     
     public static void homePage() throws SQLException {
-        System.out.println(readData(1));
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        frame.setSize(600, 450);
+        frame.setSize(750, 450);
         frame.setTitle("Home Page");
         frame.setLocationRelativeTo(null);
         frame.setLayout(null);
         frame.setBackground(Color.cyan);
 
-        hpHeaderPub.setBounds(110, 10, 125, 15);
-        pubPhoneNums.setBounds(50, 45, 250, 125);
+        hpHeaderPub.setBounds(75, 10, 125, 15);
+        pubPhoneNums.setBounds(50, 45, 350, 125);
         pubPhoneNums.setBorder(BorderFactory.createLineBorder(Color.DARK_GRAY));
 
-        hpHeaderPrv.setBounds(110, 190, 125, 15);
-        prvPhoneNums.setBounds(50, 210, 250, 125);
+        hpHeaderPrv.setBounds(75, 190, 125, 15);
+        prvPhoneNums.setBounds(50, 210, 350, 125);
         prvPhoneNums.setBorder(BorderFactory.createLineBorder(Color.DARK_GRAY));
 
-        String[] cols = {"FirstName","PhoneNumber" , "btn"};
-        DefaultTableModel pubTableModel = (DefaultTableModel) pubTable.getModel();
-        DefaultTableModel prvTableModel = (DefaultTableModel) prvTable.getModel();
-        pubTableModel.setColumnIdentifiers(cols);
-        prvTableModel.setColumnIdentifiers(cols);
-        ResultSet rs1 = readData(1);
-        Object[] data;
-        while (rs1.next()) {
-            data = new Object[colNo];
-            for (int i = 0; i < colNo; i++) {
-                data[i] = rs1.getObject(i + 1);
-            }
-            pubTableModel.addRow(data);
-        }
-        ResultSet rs2 = readData(2);
-        while (rs2.next()) {
-            data = new Object[colNo];
-            for (int i = 0; i < colNo; i++) {
-                data[i] = rs2.getObject(i + 1);
-            }
-            prvTableModel.addRow(data);
-        }
-
-        pubTable.setModel(pubTableModel);
-        prvTable.setModel(prvTableModel);
+        PhoneBookLogin.showData();
         prvPhoneNums.setBorder(border);
 
         pubTable.setDefaultEditor(Object.class, null);
@@ -115,9 +116,13 @@ public class PhoneBookHP{
         TableColumnModel pubColumnModel = pubTable.getColumnModel();
         pubColumnModel.getColumn(0).setPreferredWidth(75);
         pubColumnModel.getColumn(1).setPreferredWidth(120);
+        pubColumnModel.getColumn(2).setPreferredWidth(75);
+        pubColumnModel.getColumn(3).setPreferredWidth(75);
         TableColumnModel prvColumnModel = prvTable.getColumnModel();
         prvColumnModel.getColumn(0).setPreferredWidth(75);
         prvColumnModel.getColumn(1).setPreferredWidth(120);
+        prvColumnModel.getColumn(2).setPreferredWidth(75);
+        prvColumnModel.getColumn(3).setPreferredWidth(75);
 
         pubPhoneNums.add(pubTable);
         prvPhoneNums.add(prvTable);
@@ -131,15 +136,16 @@ public class PhoneBookHP{
         frame.add(pubPhoneNums);
         frame.add(prvPhoneNums);
         frame.add(addContact);
-        frame.add(rmContact);
+        frame.add(searchContact);
 
         PhoneBookRm.removePage();
-        PhoneBookInsert.insertPage();
+        PhoneBookInsert insert = new PhoneBookInsert();
+        insert.insertPage();
+        PhoneBookSearch.searchPage();
         frame.setVisible(true);
-        ResultSet rs = readData(1);
-        System.out.println(rs.isClosed());
     }
         public static void main(String[] args) throws SQLException {
             homePage();
         }
+
 }
