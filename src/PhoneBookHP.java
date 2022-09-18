@@ -2,12 +2,16 @@ import javax.swing.*;
 import javax.swing.border.Border;
 import javax.swing.border.LineBorder;
 import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.sql.*;
 import javax.swing.JScrollPane;
+import javax.swing.event.ListSelectionEvent;
+import javax.swing.event.ListSelectionListener;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableColumnModel;
 
-public class PhoneBookHP{
+public class PhoneBookHP implements ActionListener{
     public static final String URL = "jdbc:sqlserver://localhost\\SQL;database=PhoneBook;trustServerCertificate=true";
     public static final String DB_USERNAME = "sa";
     public static final String DB_PASSWORD = "123";
@@ -30,9 +34,28 @@ public class PhoneBookHP{
             throwables.printStackTrace();
         }
     }
+    public static Statement statement1;
+
+    static {
+        try {
+            statement1 = con.createStatement();
+        } catch (SQLException throwables) {
+            throwables.printStackTrace();
+        }
+    }
+    public static Statement statement2;
+
+    static {
+        try {
+            statement2 = con.createStatement();
+        } catch (SQLException throwables) {
+            throwables.printStackTrace();
+        }
+    }
 
     public static JFrame frame = new JFrame();
     public static JFrame frameLogin = new JFrame();
+    public static JFrame framePopUp = new JFrame();
     public static JPanel pubPhoneNums = new JPanel();
     public static JPanel prvPhoneNums = new JPanel();
     public static JPanel rmContact = new JPanel();
@@ -47,6 +70,7 @@ public class PhoneBookHP{
     public static JLabel accessLabel = new JLabel("Access");
     public static JLabel userLabel = new JLabel("Username");
     public static JLabel passLabel = new JLabel("Password");
+    public static JLabel opsLabel = new JLabel("Choose Operation");
     public static JPasswordField passInput= new JPasswordField();
     public static JTextField userInput = new JTextField();
     public static JTextField firstNameInput= new JTextField("Enter Target's FullName");
@@ -56,6 +80,8 @@ public class PhoneBookHP{
     public static JButton insertBtn = new JButton("Add");
     public static JButton searchBtn = new JButton("Search");
     public static JButton newNumBtn = new JButton("New Number");
+    public static JButton rmBtn = new JButton("remove");
+    public static JButton editBtn = new JButton("edit");
     public static JButton rmNumBtn = new JButton("Remove Number");
     public static Border border = new LineBorder(Color.gray, 3, true);
 
@@ -92,7 +118,7 @@ public class PhoneBookHP{
         prvTable.setModel(model);
     }
     
-    public static void homePage() throws SQLException {
+    public void homePage() throws SQLException {
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.setSize(750, 450);
         frame.setTitle("Home Page");
@@ -124,6 +150,7 @@ public class PhoneBookHP{
         prvColumnModel.getColumn(2).setPreferredWidth(75);
         prvColumnModel.getColumn(3).setPreferredWidth(75);
 
+        rmBtn.addActionListener(this);
         pubPhoneNums.add(pubTable);
         prvPhoneNums.add(prvTable);
 
@@ -141,11 +168,26 @@ public class PhoneBookHP{
         PhoneBookRm.removePage();
         PhoneBookInsert insert = new PhoneBookInsert();
         insert.insertPage();
-        PhoneBookSearch.searchPage();
+        PhoneBookSearch search = new PhoneBookSearch();
+                search.searchPage();
         frame.setVisible(true);
     }
         public static void main(String[] args) throws SQLException {
-            homePage();
+            PhoneBookHP hp = new PhoneBookHP();
+            hp.homePage();
         }
 
+    @Override
+    public void actionPerformed(ActionEvent e) {
+        String sql = "delete from dbo.contacts where PhoneNumber = ?";
+        int col = 2;
+        int row = pubTable.getSelectedRow();
+        String value = pubTable.getModel().getValueAt(row, col).toString();
+        try {
+            PreparedStatement pst = con.prepareStatement(sql);
+            pst.setString(1 , value);
+        } catch (SQLException ex) {
+            throw new RuntimeException(ex);
+        }
+    }
 }

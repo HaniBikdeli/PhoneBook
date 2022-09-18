@@ -49,7 +49,8 @@ public class PhoneBookLogin extends PhoneBookHP implements ActionListener{
             if(rs.next()){
                 id = rs.getInt(1);
                 frameLogin.dispose();
-                PhoneBookHP.homePage();
+                PhoneBookHP hp = new PhoneBookHP();
+                hp.homePage();
             }
             else{
                 JOptionPane.showMessageDialog(null, "Login Failed.");
