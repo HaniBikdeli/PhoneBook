@@ -42,7 +42,7 @@ public class PhoneBookLogin extends PhoneBookHP implements ActionListener{
         PreparedStatement authorization;
         try {
             connection = DriverManager.getConnection("jdbc:sqlserver://localhost\\SQL;database=PhoneBook;trustServerCertificate=true", "sa", "123");
-            creds = connection.prepareStatement("SELECT userId, username, password FROM dbo.users WHERE username = ? AND password = ?");
+            creds = connection.prepareStatement("Use PhoneBook "+"SELECT userId, username, password FROM dbo.users WHERE username = ? AND password = ?");
             creds.setString(1, userInput.getText());
             creds.setString(2, String.valueOf(passInput.getPassword()));
             ResultSet rs = creds.executeQuery();
@@ -68,7 +68,7 @@ public class PhoneBookLogin extends PhoneBookHP implements ActionListener{
 //        return id;
 //    }
 public static ResultSet readData(int auth) throws SQLException {
-    String sql = "Use PhoneBook"+" select FullName , PhoneNumber from dbo.contacts  where ownerId="+id+"AND auth = " + auth;
+    String sql = "Use PhoneBook"+" select FullName , PhoneNumber from dbo.contacts  where ownerId="+id+" AND auth = " + auth;
     ResultSet rs = statement.executeQuery(sql);
     ResultSetMetaData rsmd = rs.getMetaData();
     colNo = rsmd.getColumnCount();
