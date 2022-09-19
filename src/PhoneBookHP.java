@@ -179,7 +179,7 @@ public class PhoneBookHP implements ActionListener{
 
     @Override
     public void actionPerformed(ActionEvent e) {
-        String sql = "delete from dbo.contacts where PhoneNumber = ?";
+        String sql = "Use PhoneBook "+"delete from dbo.contacts where PhoneNumber = ?";
         int col = 2;
         int row = pubTable.getSelectedRow();
         String value = pubTable.getModel().getValueAt(row, col).toString();

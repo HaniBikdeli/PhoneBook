@@ -1,5 +1,6 @@
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
+import javax.swing.table.TableColumnModel;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -12,7 +13,7 @@ public class PhoneBookSearch extends PhoneBookHP implements ActionListener {
     static PhoneBookLogin login = new PhoneBookLogin();
     static DefaultTableModel prvTableModel;
     static int colNo;
-        public void searchPage(){
+    public void searchPage(){
         searchContact.setBounds(50, 360, 300, 40);
         searchContact.setBackground(Color.cyan);
 
@@ -34,7 +35,6 @@ public class PhoneBookSearch extends PhoneBookHP implements ActionListener {
         colNo = rsmd.getColumnCount();
         return rs;
     }
-
     @Override
     public void actionPerformed(ActionEvent e) {
         try {
@@ -69,6 +69,19 @@ public class PhoneBookSearch extends PhoneBookHP implements ActionListener {
         } catch (SQLException ex) {
             throw new RuntimeException(ex);
         }
+
+        pubTable.setDefaultEditor(Object.class, null);
+        prvTable.setDefaultEditor(Object.class, null);
+        TableColumnModel pubColumnModel = pubTable.getColumnModel();
+        pubColumnModel.getColumn(0).setPreferredWidth(75);
+        pubColumnModel.getColumn(1).setPreferredWidth(120);
+        pubColumnModel.getColumn(2).setPreferredWidth(75);
+        pubColumnModel.getColumn(3).setPreferredWidth(75);
+        TableColumnModel prvColumnModel = prvTable.getColumnModel();
+        prvColumnModel.getColumn(0).setPreferredWidth(75);
+        prvColumnModel.getColumn(1).setPreferredWidth(120);
+        prvColumnModel.getColumn(2).setPreferredWidth(75);
+        prvColumnModel.getColumn(3).setPreferredWidth(75);
 
         pubTable.setModel(pubTableModel);
         prvTable.setModel(prvTableModel);
